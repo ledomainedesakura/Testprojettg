@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Alpha Club</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial, sans-serif;
+    padding:20px;
+    min-height: 100vh;
+}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:20px;
+    margin-top:20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    margin-top:10px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+h1 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Alpha Club</h1>
+
+<div class="card">
+    <h2>Bienvenue</h2>
+    <p>Mini App Telegram.</p>
+
+    <button onclick="wallet()">
+        Connect Wallet
+    </button>
+</div>
+
+<script>
+// Initialiser Telegram Web App
+if (window.Telegram && window.Telegram.WebApp) {
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    
+    // Configuration Telegram
+    tg.setHeaderColor('#0f172a');
+    tg.setBottomBarColor('#0f172a');
+} else {
+    console.warn('Telegram Web App not available');
+}
+
+function wallet(){
+    alert("Wallet bientôt disponible");
+}
+</script>
+
+</body>
+</html>
