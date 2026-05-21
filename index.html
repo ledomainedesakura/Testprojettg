@@ -27,10 +27,12 @@ body {
     background: #1e293b;
     padding: 10px;
     border-radius: 12px;
+    flex-wrap: wrap;
 }
 
 .nav-btn {
     flex: 1;
+    min-width: 80px;
     padding: 10px;
     border: none;
     border-radius: 8px;
@@ -39,6 +41,7 @@ body {
     cursor: pointer;
     transition: all 0.3s;
     font-weight: 600;
+    font-size: 12px;
 }
 
 .nav-btn.active {
@@ -116,7 +119,7 @@ body {
     opacity: 0.7;
 }
 
-.shop-page h1 {
+.shop-page h1, .community-page h1 {
     text-align: center;
     margin-bottom: 20px;
 }
@@ -241,6 +244,66 @@ button:active {
     border-left: 4px solid #ef4444;
     color: #94a3b8;
 }
+
+.post-card {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border-left: 4px solid #3b82f6;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.post-author {
+    font-weight: bold;
+    color: #3b82f6;
+}
+
+.post-time {
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+.post-nft {
+    background: #0f172a;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: #94a3b8;
+}
+
+.post-content {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.channel-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #334155;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+}
 </style>
 </head>
 
@@ -249,9 +312,11 @@ button:active {
 <div class="navbar">
     <button class="nav-btn active" onclick="showPage('intro')">🏠 Accueil</button>
     <button class="nav-btn" onclick="showPage('shop')">🛍️ Boutique</button>
+    <button class="nav-btn" onclick="showPage('community')">👥 Communauté</button>
     <button class="nav-btn" onclick="showPage('wallet')">💰 Wallet</button>
 </div>
 
+<!-- Page Accueil -->
 <div id="intro" class="page active intro-page">
     <div class="logo">🎮</div>
     <h1>Alpha Club</h1>
@@ -268,43 +333,74 @@ button:active {
         </div>
         <div class="feature-item">
             <h3>🔐 Sécurisé</h3>
-            <p>Transactions vérifiées blockchain</p>
+            <p>Blockchain TON vérifiée</p>
         </div>
         <div class="feature-item">
             <h3>💎 Rares</h3>
-            <p>Collectibles exclusifs et limités</p>
+            <p>Collectibles exclusifs limités</p>
         </div>
         <div class="feature-item">
             <h3>🎁 Rewards</h3>
-            <p>Gagnez des bonus en vous referrer</p>
+            <p>Offres exclusives pour holders</p>
         </div>
     </div>
 
     <button onclick="showPage('shop')">Commencer à acheter</button>
 </div>
 
+<!-- Page Boutique -->
 <div id="shop" class="page shop-page">
     <h1>🛍️ Boutique NFT</h1>
     
-    <div class="products-grid">
-    </div>
+    <div class="products-grid"></div>
 
     <div class="wallet-status disconnected" id="walletStatus">
         ⚠️ Connectez votre wallet pour acheter
     </div>
 </div>
 
+<!-- Page Communauté -->
+<div id="community" class="page community-page">
+    <h1>👥 Communauté Alpha Club</h1>
+    
+    <div class="channel-tabs">
+        <button class="tab-btn active" onclick="switchTab('public')">🌐 Public</button>
+        <button class="tab-btn" onclick="switchTab('private')">🔒 Privé</button>
+    </div>
+
+    <div id="public-tab" class="tab-content" style="display: block;">
+        <p style="text-align: center; margin-bottom: 20px; color: #94a3b8;">
+            📢 Partagez vos expériences avec les NFT Alpha Club
+        </p>
+        <div id="public-posts"></div>
+    </div>
+
+    <div id="private-tab" class="tab-content" style="display: none;">
+        <div id="private-content">
+            <div class="wallet-status disconnected" style="text-align: center; margin: 20px 0;">
+                🔒 Réservé aux holders de NFT
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page Wallet -->
 <div id="wallet" class="page">
     <h1>💰 Wallet</h1>
     
     <div class="intro-card">
         <h2>Connecter Wallet</h2>
-        <p>Connectez votre wallet Telegram pour accéder aux achats</p>
+        <p>Connectez votre wallet TON pour accéder aux avantages exclusifs</p>
         <button onclick="connectWallet()">Connecter Wallet</button>
     </div>
 
     <div class="wallet-status disconnected" id="walletInfo">
         Aucun wallet connecté
+    </div>
+
+    <div id="nft-holdings" style="margin-top: 20px; display: none;">
+        <h3 style="margin-bottom: 15px;">Vos NFT</h3>
+        <div id="holdings-list"></div>
     </div>
 </div>
 
@@ -312,7 +408,8 @@ button:active {
 const tg = window.Telegram.WebApp;
 
 const CONFIG = {
-    BOT_USERNAME: 'AlphaClubBot'
+    BOT_USERNAME: 'AlphaClubBot',
+    API_BASE: window.location.origin
 };
 
 if (tg) {
@@ -356,7 +453,29 @@ const products = [
     }
 ];
 
+const communityPosts = [
+    {
+        author: 'Alice 🐉',
+        nft: 'Dragon Gold',
+        time: '2h ago',
+        content: 'Le Dragon Gold est incroyable! Les récompenses 10% sont vraiment utiles 🎉'
+    },
+    {
+        author: 'Bob 🔥',
+        nft: 'Phoenix Fire',
+        time: '4h ago',
+        content: 'Excellent NFT pour les traders! La réduction 5% sur les offres c\'est du bonus 💰'
+    },
+    {
+        author: 'Charlie 🐺',
+        nft: 'Cyber Wolf',
+        time: '6h ago',
+        content: 'Super collection pour commencer dans Alpha Club. Vraiment recommandé! ⭐'
+    }
+];
+
 let walletConnected = false;
+let userNFTs = [];
 
 function showPage(pageName) {
     document.querySelectorAll('.page').forEach(page => {
@@ -372,6 +491,29 @@ function showPage(pageName) {
     
     if (pageName === 'shop') {
         loadProducts();
+    } else if (pageName === 'community') {
+        loadCommunityPosts();
+    }
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.style.display = 'none';
+    });
+    
+    document.getElementById(tabName + '-tab').style.display = 'block';
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    if (tabName === 'private' && !walletConnected) {
+        document.getElementById('private-content').innerHTML = `
+            <div class="wallet-status disconnected" style="text-align: center; margin: 20px 0;">
+                🔒 Veuillez connecter votre wallet pour voir le contenu privé
+            </div>
+        `;
     }
 }
 
@@ -393,6 +535,20 @@ function loadProducts() {
     `).join('');
 }
 
+function loadCommunityPosts() {
+    const postsContainer = document.getElementById('public-posts');
+    postsContainer.innerHTML = communityPosts.map(post => `
+        <div class="post-card">
+            <div class="post-header">
+                <span class="post-author">${post.author}</span>
+                <span class="post-time">${post.time}</span>
+            </div>
+            <div class="post-nft">🎮 ${post.nft}</div>
+            <div class="post-content">${post.content}</div>
+        </div>
+    `).join('');
+}
+
 function buyNFT(productId, productName) {
     if (!walletConnected) {
         tg.showAlert('Veuillez connecter votre wallet d\'abord');
@@ -403,7 +559,7 @@ function buyNFT(productId, productName) {
     const paymentData = `nft_${productId}`;
     tg.openTelegramLink(`https://t.me/${CONFIG.BOT_USERNAME}?start=${paymentData}`);
     
-    console.log(`Achat initialisé: ${productName} (ID: ${productId})`);
+    console.log(`Achat: ${productName}`);
 }
 
 function connectWallet() {
@@ -415,6 +571,12 @@ function connectWallet() {
     walletConnected = true;
     const userId = tg.initDataUnsafe.user.id;
     const firstName = tg.initDataUnsafe.user.first_name || 'Utilisateur';
+    
+    // Simuler les NFT de l'utilisateur
+    userNFTs = [
+        { name: 'Dragon Gold', rarity: 'Légendaire' },
+        { name: 'Phoenix Fire', rarity: 'Épique' }
+    ];
     
     document.getElementById('walletStatus').innerHTML = '✅ Wallet connecté avec succès';
     document.getElementById('walletStatus').classList.remove('disconnected');
@@ -429,6 +591,15 @@ function connectWallet() {
     `;
     document.getElementById('walletInfo').classList.remove('disconnected');
     document.getElementById('walletInfo').classList.add('connected');
+    
+    // Afficher les NFT possédés
+    document.getElementById('nft-holdings').style.display = 'block';
+    document.getElementById('holdings-list').innerHTML = userNFTs.map(nft => `
+        <div class="post-card" style="margin-bottom: 10px;">
+            <div style="font-size: 14px; margin-bottom: 5px;"><strong>${nft.name}</strong></div>
+            <div style="font-size: 12px; color: #3b82f6;">⭐ ${nft.rarity}</div>
+        </div>
+    `).join('');
     
     tg.showAlert('Wallet connecté avec succès! 🎉');
 }
