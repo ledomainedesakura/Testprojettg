@@ -3,11 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Alpha Club</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
 * {
     margin: 0;
@@ -15,29 +12,201 @@
     box-sizing: border-box;
 }
 
-body{
-    background:#0f172a;
-    color:white;
-    font-family:Arial, sans-serif;
-    padding:20px;
+body {
+    background: #0f172a;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
     min-height: 100vh;
 }
 
-.card{
-    background:#1e293b;
-    padding:20px;
-    border-radius:20px;
-    margin-top:20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+.navbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 12px;
 }
 
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
-    margin-top:10px;
+.nav-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #334155;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.nav-btn.active {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.intro-page {
+    text-align: center;
+}
+
+.logo {
+    font-size: 64px;
+    margin: 20px 0;
+}
+
+.intro-card {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    padding: 30px;
+    border-radius: 20px;
+    margin: 20px 0;
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+}
+
+.intro-card h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.intro-card p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 20px;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.feature-item {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 4px solid #3b82f6;
+}
+
+.feature-item h3 {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #3b82f6;
+}
+
+.feature-item p {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.shop-page h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.product-card {
+    background: #1e293b;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+}
+
+.product-image {
+    width: 100%;
+    height: 150px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.product-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #3b82f6;
+}
+
+.buy-btn {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    transition: all 0.3s;
+}
+
+.buy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.buy-btn:active {
+    transform: scale(0.98);
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    margin-top: 10px;
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
     color: white;
     cursor: pointer;
@@ -54,51 +223,219 @@ button:active {
     transform: translateY(0);
 }
 
-h1 {
-    margin-bottom: 20px;
+.wallet-status {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
     text-align: center;
+    font-size: 12px;
 }
 
-h2 {
-    margin-bottom: 10px;
+.wallet-status.connected {
+    border-left: 4px solid #10b981;
+    color: #10b981;
 }
 
-p {
-    margin-bottom: 20px;
-    opacity: 0.9;
+.wallet-status.disconnected {
+    border-left: 4px solid #ef4444;
+    color: #94a3b8;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Alpha Club</h1>
+<div class="navbar">
+    <button class="nav-btn active" onclick="showPage('intro')">🏠 Accueil</button>
+    <button class="nav-btn" onclick="showPage('shop')">🛍️ Boutique</button>
+    <button class="nav-btn" onclick="showPage('wallet')">💰 Wallet</button>
+</div>
 
-<div class="card">
-    <h2>Bienvenue</h2>
-    <p>Mini App Telegram.</p>
+<div id="intro" class="page active intro-page">
+    <div class="logo">🎮</div>
+    <h1>Alpha Club</h1>
+    
+    <div class="intro-card">
+        <h2>Bienvenue dans Alpha Club</h2>
+        <p>La première plateforme de NFT gaming sur Telegram</p>
+    </div>
 
-    <button onclick="wallet()">
-        Connect Wallet
-    </button>
+    <div class="features">
+        <div class="feature-item">
+            <h3>🚀 Rapide</h3>
+            <p>Achetez des NFT en quelques secondes</p>
+        </div>
+        <div class="feature-item">
+            <h3>🔐 Sécurisé</h3>
+            <p>Transactions vérifiées blockchain</p>
+        </div>
+        <div class="feature-item">
+            <h3>💎 Rares</h3>
+            <p>Collectibles exclusifs et limités</p>
+        </div>
+        <div class="feature-item">
+            <h3>🎁 Rewards</h3>
+            <p>Gagnez des bonus en vous referrer</p>
+        </div>
+    </div>
+
+    <button onclick="showPage('shop')">Commencer à acheter</button>
+</div>
+
+<div id="shop" class="page shop-page">
+    <h1>🛍️ Boutique NFT</h1>
+    
+    <div class="products-grid">
+    </div>
+
+    <div class="wallet-status disconnected" id="walletStatus">
+        ⚠️ Connectez votre wallet pour acheter
+    </div>
+</div>
+
+<div id="wallet" class="page">
+    <h1>💰 Wallet</h1>
+    
+    <div class="intro-card">
+        <h2>Connecter Wallet</h2>
+        <p>Connectez votre wallet Telegram pour accéder aux achats</p>
+        <button onclick="connectWallet()">Connecter Wallet</button>
+    </div>
+
+    <div class="wallet-status disconnected" id="walletInfo">
+        Aucun wallet connecté
+    </div>
 </div>
 
 <script>
-// Initialiser Telegram Web App
-if (window.Telegram && window.Telegram.WebApp) {
-    const tg = window.Telegram.WebApp;
+const tg = window.Telegram.WebApp;
+
+const CONFIG = {
+    BOT_USERNAME: 'AlphaClubBot'
+};
+
+if (tg) {
     tg.expand();
-    
-    // Configuration Telegram
     tg.setHeaderColor('#0f172a');
     tg.setBottomBarColor('#0f172a');
-} else {
-    console.warn('Telegram Web App not available');
 }
 
-function wallet(){
-    alert("Wallet bientôt disponible");
+const products = [
+    {
+        id: 1,
+        name: 'Dragon Gold',
+        emoji: '🐉',
+        price: '0.5 TON',
+        desc: 'NFT rare avec bonus 10% récompenses',
+        rarity: 'Légendaire'
+    },
+    {
+        id: 2,
+        name: 'Phoenix Fire',
+        emoji: '🔥',
+        price: '0.25 TON',
+        desc: 'NFT épique avec 5% de réduction',
+        rarity: 'Épique'
+    },
+    {
+        id: 3,
+        name: 'Cyber Wolf',
+        emoji: '🐺',
+        price: '0.1 TON',
+        desc: 'NFT rare pour débuter votre collection',
+        rarity: 'Rare'
+    },
+    {
+        id: 4,
+        name: 'Space Hawk',
+        emoji: '🦅',
+        price: '0.15 TON',
+        desc: 'NFT rare avec bonus spécial',
+        rarity: 'Rare'
+    }
+];
+
+let walletConnected = false;
+
+function showPage(pageName) {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+    
+    document.getElementById(pageName).classList.add('active');
+    
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    if (pageName === 'shop') {
+        loadProducts();
+    }
 }
+
+function loadProducts() {
+    const grid = document.querySelector('.products-grid');
+    grid.innerHTML = products.map(product => `
+        <div class="product-card">
+            <div class="product-image">${product.emoji}</div>
+            <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-desc">${product.desc}</div>
+                <div style="font-size: 10px; color: #3b82f6; margin-bottom: 10px;">⭐ ${product.rarity}</div>
+                <div class="product-footer">
+                    <div class="product-price">${product.price}</div>
+                    <button class="buy-btn" onclick="buyNFT(${product.id}, '${product.name}')">🛒 Acheter</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function buyNFT(productId, productName) {
+    if (!walletConnected) {
+        tg.showAlert('Veuillez connecter votre wallet d\'abord');
+        showPage('wallet');
+        return;
+    }
+    
+    const paymentData = `nft_${productId}`;
+    tg.openTelegramLink(`https://t.me/${CONFIG.BOT_USERNAME}?start=${paymentData}`);
+    
+    console.log(`Achat initialisé: ${productName} (ID: ${productId})`);
+}
+
+function connectWallet() {
+    if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
+        tg.showAlert('Erreur: Utilisateur non identifié');
+        return;
+    }
+    
+    walletConnected = true;
+    const userId = tg.initDataUnsafe.user.id;
+    const firstName = tg.initDataUnsafe.user.first_name || 'Utilisateur';
+    
+    document.getElementById('walletStatus').innerHTML = '✅ Wallet connecté avec succès';
+    document.getElementById('walletStatus').classList.remove('disconnected');
+    document.getElementById('walletStatus').classList.add('connected');
+    
+    document.getElementById('walletInfo').innerHTML = `
+        <div style="text-align: left;">
+            <p><strong>Utilisateur:</strong> ${firstName}</p>
+            <p><strong>ID:</strong> ${userId}</p>
+            <p><strong>Statut:</strong> ✅ Connecté</p>
+        </div>
+    `;
+    document.getElementById('walletInfo').classList.remove('disconnected');
+    document.getElementById('walletInfo').classList.add('connected');
+    
+    tg.showAlert('Wallet connecté avec succès! 🎉');
+}
+
+window.addEventListener('load', () => {
+    loadProducts();
+});
 </script>
 
 </body>
